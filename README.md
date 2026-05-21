@@ -1,3 +1,74 @@
+# How to use the code
+
+This project provides a system-level energy simulation of LoRaWAN sensor nodes in ns-3.
+Each node cycles through: Wake-up → Sensor Measurement → LoRaWAN TX+RX → Deep Sleep.
+A sweep script (`run_sweep.py`) runs the ns-3 simulation over multiple RNG seeds for Monte Carlo averaging.
+
+## Setup
+
+1. Clone the repo.
+
+2. Build ns-3.
+
+## Running the simulation
+
+Edit the parameters at the top of `scratch/multi-sensor-lorawan-energy/run_sweep.py`, then run:
+
+```bash
+cd scratch/multi-sensor-lorawan-energy/
+python run_sweep.py
+```
+
+### Configurable parameters in `run_sweep.py`
+
+| Parameter | Description |
+|---|---|
+| `numNodes` | Number of end devices |
+| `period` | Interval between two consecutive cycles (s) |
+| `stopTime` | Simulation duration (s) |
+| `radius` | Deployment disc radius (m) |
+| `spreadingFactor` | LoRa SF (7–12), applied uniformly |
+| `initialEnergy` | Initial battery energy per node (J) |
+| `packetSize` | Application payload size (bytes) |
+| `measurementDuration` | Duration per sensor measurement (s) |
+| `measurementCurrent` | Average sensor current during measurement (A) |
+| `sensorOverhead` | Fixed overhead charge per sensing event (C) |
+| `numSample` | Number of samples per cycle |
+| `runStart` / `runEnd` | Range of RNG seeds to sweep |
+
+
+## Output
+
+Results are written to `multi-sensor-lorawan-energy-output/` at the ns-3 top level folder.
+Each sweep produces a timestamped folder containing per-`runNum` subdirectories with:
+
+| File | Content |
+|---|---|
+| `packet-stats.csv` | Per-gateway packet counts: sent, received, interfered, lost |
+| `depletion.csv` | Per-node depletion time and remaining energy |
+| `node-config.csv` | Node positions, start times, and assigned data rate |
+
+## Sensor configuration reference
+
+The sensor model follows $Q_{sensing} = Q_{overhead} + N \cdot I_s \cdot T_{sample}$.
+See the table below for the two sensors characterized in the paper.
+
+| Parameter | BME280 | SEN55 | Unit |
+|---|---|---|---|
+| `measurementDuration` | 0.01498 | 35.57 | s |
+| `measurementCurrent` | 0.02149 | 0.1332 | A |
+| `sensorOverhead` | 0.0044376 | 0 | C |
+| `numSample` | 5 | 1 | — |
+
+## References
+
+- ns-3: https://gitlab.com/nsnam/ns-3-dev
+- lorawan module: https://github.com/signetlabdei/lorawan
+- Paper: System-Level Energy Modeling of Sensing-Dominant LoRa Nodes in ns-3
+
+---
+Below are the original ns-3 repo readme.
+
 # The Network Simulator, Version 3
 
 [![codecov](https://codecov.io/gh/nsnam/ns-3-dev-git/branch/master/graph/badge.svg)](https://codecov.io/gh/nsnam/ns-3-dev-git/branch/master/)
