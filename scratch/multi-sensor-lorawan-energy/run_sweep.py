@@ -27,7 +27,7 @@ stopTime = 57000000
 radius = 1000.0
 
 spreadingFactor = 12
-initialEnergy = 10
+initialEnergy = 1000
 packetSize = 15
 
 # BME280
