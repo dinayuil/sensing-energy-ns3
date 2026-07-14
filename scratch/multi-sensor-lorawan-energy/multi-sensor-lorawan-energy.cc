@@ -7,7 +7,7 @@
  *
  * Energy models:
  *   - LoraRadioEnergyModel: radio (TX/RX/Standby/Sleep + per-state overhead charges)
- *   - MySimpleEnergyModel: sensor (y = a*x + b linear model with overhead charge)
+ *   - SimpleSensorEnergyModel: sensor (y = a*x + b linear model with overhead charge)
  */
 
 #include "ns3/class-a-end-device-lorawan-mac.h"
@@ -23,7 +23,7 @@
 #include "ns3/lora-helper.h"
 #include "ns3/lora-radio-energy-model-helper.h"
 #include "ns3/mobility-helper.h"
-#include "ns3/my-simple-energy-model.h"
+#include "ns3/simple-sensor-energy-model.h"
 #include "ns3/names.h"
 #include "ns3/node-container.h"
 #include "ns3/packet.h"
@@ -88,7 +88,7 @@ std::string regionStr = "EU";
 std::map<Ptr<const Packet>, Ptr<SimpleEndDeviceLoraPhy>> g_packetToPhyMap;
 std::map<uint32_t, std::pair<double, double>> g_nodeDepletionRecord;
 std::set<uint32_t> g_depletedNodes;
-std::map<uint32_t, Ptr<MySimpleEnergyModel>> g_sensorModels;
+std::map<uint32_t, Ptr<SimpleSensorEnergyModel>> g_sensorModels;
 std::map<uint32_t, Ptr<LoraRadioEnergyModel>> g_radioEnergyModels;
 
 // ---------------------------------------------------------------------------
@@ -575,7 +575,7 @@ main(int argc, char* argv[])
         radioModel->SetSleepCurrentA(0.0);       // sensor phase: LoRa sleep is covered by node current
         g_radioEnergyModels[node->GetId()] = radioModel;
 
-        Ptr<MySimpleEnergyModel> sensorModel = CreateObject<MySimpleEnergyModel>();
+        Ptr<SimpleSensorEnergyModel> sensorModel = CreateObject<SimpleSensorEnergyModel>();
         sensorModel->SetEnergySource(source);
         sensorModel->SetOverheadCharge(sensorOverhead);
         source->AppendDeviceEnergyModel(sensorModel);

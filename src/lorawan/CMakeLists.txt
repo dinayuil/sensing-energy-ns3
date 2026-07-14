@@ -38,7 +38,7 @@ set(source_files
     model/adr-component.cc
     model/hex-grid-position-allocator.cc
     model/lora-energy-source.cc
-    model/my-simple-energy-model.cc
+    model/simple-sensor-energy-model.cc
     helper/lora-radio-energy-model-helper.cc
     helper/lora-helper.cc
     helper/lora-phy-helper.cc
@@ -91,7 +91,7 @@ set(header_files
     model/adr-component.h
     model/hex-grid-position-allocator.h
     model/lora-energy-source.h
-    model/my-simple-energy-model.h
+    model/simple-sensor-energy-model.h
     helper/lora-radio-energy-model-helper.h
     helper/lora-helper.h
     helper/lora-phy-helper.h

@@ -1,5 +1,4 @@
-
-#include "my-simple-energy-model.h"
+#include "simple-sensor-energy-model.h"
 
 #include "ns3/energy-source.h"
 #include "ns3/lora-energy-source.h"
@@ -13,31 +12,31 @@ namespace ns3
 namespace lorawan
 {
 
-NS_LOG_COMPONENT_DEFINE("MySimpleEnergyModel");
-NS_OBJECT_ENSURE_REGISTERED(MySimpleEnergyModel);
+NS_LOG_COMPONENT_DEFINE("SimpleSensorEnergyModel");
+NS_OBJECT_ENSURE_REGISTERED(SimpleSensorEnergyModel);
 
 TypeId
-MySimpleEnergyModel::GetTypeId()
+SimpleSensorEnergyModel::GetTypeId()
 {
-    static TypeId tid = TypeId("ns3::lorawan::MySimpleEnergyModel")
+    static TypeId tid = TypeId("ns3::lorawan::SimpleSensorEnergyModel")
                             .SetParent<energy::DeviceEnergyModel>()
                             .SetGroupName("Energy")
-                            .AddConstructor<MySimpleEnergyModel>()
+                            .AddConstructor<SimpleSensorEnergyModel>()
                             .AddAttribute("OverheadCharge",
                                           "Fixed charge overhead per measurement cycle (Coulombs).",
                                           DoubleValue(0.0),
-                                          MakeDoubleAccessor(&MySimpleEnergyModel::SetOverheadCharge,
-                                                             &MySimpleEnergyModel::GetOverheadCharge),
+                                          MakeDoubleAccessor(&SimpleSensorEnergyModel::SetOverheadCharge,
+                                                             &SimpleSensorEnergyModel::GetOverheadCharge),
                                           MakeDoubleChecker<double>())
                             .AddTraceSource("TotalEnergyConsumption",
                                             "Total energy consumption of the radio device.",
                                             MakeTraceSourceAccessor(
-                                                &MySimpleEnergyModel::m_totalEnergyConsumption),
+                                                &SimpleSensorEnergyModel::m_totalEnergyConsumption),
                                             "ns3::TracedValueCallback::Double");
     return tid;
 }
 
-MySimpleEnergyModel::MySimpleEnergyModel()
+SimpleSensorEnergyModel::SimpleSensorEnergyModel()
 {
     NS_LOG_FUNCTION(this);
     m_lastUpdateTime = Seconds(0);
@@ -46,13 +45,13 @@ MySimpleEnergyModel::MySimpleEnergyModel()
     m_source = nullptr;
 }
 
-MySimpleEnergyModel::~MySimpleEnergyModel()
+SimpleSensorEnergyModel::~SimpleSensorEnergyModel()
 {
     NS_LOG_FUNCTION(this);
 }
 
 void
-MySimpleEnergyModel::SetEnergySource(Ptr<energy::EnergySource> source)
+SimpleSensorEnergyModel::SetEnergySource(Ptr<energy::EnergySource> source)
 {
     NS_LOG_FUNCTION(this << source);
     NS_ASSERT(source);
@@ -60,7 +59,7 @@ MySimpleEnergyModel::SetEnergySource(Ptr<energy::EnergySource> source)
 }
 
 void
-MySimpleEnergyModel::SetNode(Ptr<Node> node)
+SimpleSensorEnergyModel::SetNode(Ptr<Node> node)
 {
     NS_LOG_FUNCTION(this << node);
     NS_ASSERT(node);
@@ -68,14 +67,14 @@ MySimpleEnergyModel::SetNode(Ptr<Node> node)
 }
 
 Ptr<Node>
-MySimpleEnergyModel::GetNode() const
+SimpleSensorEnergyModel::GetNode() const
 {
     NS_LOG_FUNCTION(this);
     return m_node;
 }
 
 double
-MySimpleEnergyModel::GetTotalEnergyConsumption() const
+SimpleSensorEnergyModel::GetTotalEnergyConsumption() const
 {
     NS_LOG_FUNCTION(this);
     Time duration = Simulator::Now() - m_lastUpdateTime;
@@ -90,7 +89,7 @@ MySimpleEnergyModel::GetTotalEnergyConsumption() const
 }
 
 void
-MySimpleEnergyModel::SetCurrentA(double current)
+SimpleSensorEnergyModel::SetCurrentA(double current)
 {
     NS_LOG_FUNCTION(this << current);
     Time duration = Simulator::Now() - m_lastUpdateTime;
@@ -113,20 +112,20 @@ MySimpleEnergyModel::SetCurrentA(double current)
 }
 
 void
-MySimpleEnergyModel::SetOverheadCharge(double charge)
+SimpleSensorEnergyModel::SetOverheadCharge(double charge)
 {
     NS_LOG_FUNCTION(this << charge);
     m_overheadCharge = charge;
 }
 
 double
-MySimpleEnergyModel::GetOverheadCharge() const
+SimpleSensorEnergyModel::GetOverheadCharge() const
 {
     return m_overheadCharge;
 }
 
 void
-MySimpleEnergyModel::ApplyOverheadCharge()
+SimpleSensorEnergyModel::ApplyOverheadCharge()
 {
     NS_LOG_FUNCTION(this);
 
@@ -140,25 +139,25 @@ MySimpleEnergyModel::ApplyOverheadCharge()
     }
     else
     {
-        NS_LOG_WARN("MySimpleEnergyModel: EnergySource is not LoraEnergySource, overhead ignored.");
+        NS_LOG_WARN("SimpleSensorEnergyModel: EnergySource is not LoraEnergySource, overhead ignored.");
         return;
     }
 
     m_totalEnergyConsumption += overheadEnergy;
 
-    NS_LOG_DEBUG("MySimpleEnergyModel: Applied measurement overhead energy: "
+    NS_LOG_DEBUG("SimpleSensorEnergyModel: Applied measurement overhead energy: "
                  << overheadEnergy << " J");
 }
 
 void
-MySimpleEnergyModel::DoDispose()
+SimpleSensorEnergyModel::DoDispose()
 {
     NS_LOG_FUNCTION(this);
     m_source = nullptr;
 }
 
 double
-MySimpleEnergyModel::DoGetCurrentA() const
+SimpleSensorEnergyModel::DoGetCurrentA() const
 {
     NS_LOG_FUNCTION(this);
     return m_actualCurrentA;

@@ -1,5 +1,3 @@
-
-
 #ifndef MY_SIMPLE_ENERGY_MODEL_H
 #define MY_SIMPLE_ENERGY_MODEL_H
 
@@ -21,7 +19,7 @@ namespace lorawan
  * It is supposed to be used as a testing model for energy sources.
  *
  */
-class MySimpleEnergyModel : public energy::DeviceEnergyModel
+class SimpleSensorEnergyModel : public energy::DeviceEnergyModel
 {
   public:
     /**
@@ -29,8 +27,8 @@ class MySimpleEnergyModel : public energy::DeviceEnergyModel
      * @return The object TypeId.
      */
     static TypeId GetTypeId();
-    MySimpleEnergyModel();
-    ~MySimpleEnergyModel() override;
+    SimpleSensorEnergyModel();
+    ~SimpleSensorEnergyModel() override;
 
     /**
      * @brief Sets pointer to node.
